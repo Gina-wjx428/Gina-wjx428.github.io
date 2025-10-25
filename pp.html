@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图案设计探索 - 彭罗斯镶嵌与更多</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .page {
+            display: none; /* 默认隐藏所有页面 */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .page.active {
+            display: block; /* 仅激活的页面显示 */
+            z-index: 1;
+        }
+
+        /* 字体样式 */
+        .title-font {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .body-font {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
+
+        .btn-font {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+        #page1 {
+            background-image: url('https://ts1.tc.mm.bing.net/th/id/R-C.2e82635c7a3c16027244655a70c6a786?rik=ypM9JnMvqG9nuw&riu=http%3a%2f%2fswarma.org%2fwp-content%2fuploads%2f2019%2f03%2fswarma8-1553075265.jpeg&ehk=MxtVdOg0bMYJcPn8mbW7T1dYCsnpEX4b%2fkC2QGK8AfQ%3d&risl=&pid=ImgRaw&r=0');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 22px 32px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        #username {
+            padding: 13px 16px;
+            font-size: 17px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            width: 280px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #confirmBtn {
+            padding: 13px 24px;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 17px;
+            transition: background-color 0.3s;
+        }
+
+        #confirmBtn:hover {
+            background-color: #ff1493;
+        }
+        #page2 {
+            background-image: url('https://ts4.tc.mm.bing.net/th/id/OIP-C._5Va255i6CGCsx2G1IZMbAHaET?rs=1&pid=ImgDetMain&o=7&rm=3');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .option-btn {
+            padding: 28px 50px;
+            font-size: 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s;
+        }
+
+        .option-btn:hover {
+            transform: scale(1.05);
+        }
+        .intro-page {
+            background-color: white;
+            overflow-y: auto;
+        }
+
+        .nav-btn {
+            width: 48px;
+            height: 48px;
+            position: fixed;
+            top: 28px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        .prev-btn {
+            background-color: #1e90ff;
+            left: 28px;
+        }
+
+        .next-btn {
+            background-color: #ffa500;
+            right: 28px;
+        }
+
+        .intro-content {
+            min-height: 100%;
+            padding: 120px 80px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .text-content h2 {
+            margin-bottom: 32px;
+            font-size: 34px;
+            color: #2d2d2d;
+        }
+
+        .text-content p {
+            margin-bottom: 22px;
+            font-size: 18px;
+            line-height: 1.8;
+            color: #4a4a4a;
+        }
+
+        .image-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .image-content img {
+            max-width: 90%;
+            max-height: 580px;
+            border-radius: 8px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+        }
+
+        .odd-page .text-content { order: 1; }
+        .odd-page .image-content { order: 2; }
+        .even-page .text-content { order: 2; }
+        .even-page .image-content { order: 1; }
+
+        /* 设计界面 */
+        #designPage {
+            background-color: #f8f8f8;
+            padding: 50px;
+        }
+
+        .design-title {
+            text-align: center;
+            margin: 30px 0 80px;
+            font-size: 38px;
+            color: #2d2d2d;
+        }
+
+        .design-container {
+            display: flex;
+            justify-content: center;
+            gap: 90px;
+            flex-wrap: wrap;
+        }
+
+        .design-card {
+            width: 340px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .design-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .design-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .design-card p {
+            padding: 28px;
+            text-align: center;
+            font-size: 24px;
+            color: #3d3d3d;
+        }
+
+        .back-to-main {
+            background-color: #1e90ff;
+            left: 28px;
+            top: 28px;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .intro-content {
+                flex-direction: column;
+                padding: 100px 20px;
+            }
+            .option-btn {
+                padding: 20px 35px;
+                font-size: 22px;
+            }
+            .design-container {
+                gap: 40px;
+            }
+            .design-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="page1" class="page active">
+    <div class="login-container">
+        <input type="text" id="username" placeholder="请输入您的用户名" class="body-font">
+        <button id="confirmBtn" class="btn-font">确定</button>
+    </div>
+</div>
+
+<div id="page2" class="page">
+    <button class="option-btn btn-font" id="introBtn">简介</button>
+    <button class="option-btn btn-font" id="designBtn">设计</button>
+</div>
+
+<div id="introPage1" class="page intro-page odd-page">
+    <div class="nav-btn prev-btn" id="prevBtn1"></div>
+    <div class="nav-btn next-btn" id="nextBtn1"></div>
+    <div class="intro-content">
+        <div class="text-content">
+            <h2 class="title-font">彭罗斯镶嵌 (Penrose Tiling)</h2>
+            <p class="body-font">中文：彭罗斯镶嵌是一种非周期性镶嵌，由英国数学家罗杰·彭罗斯于20世纪70年代提出。它使用两种不同形状的瓷砖（如“风筝”和“飞镖”），可以完全覆盖平面而不会形成重复的图案。</p>
+            <p class="body-font">English: Penrose tiling is a non-periodic tiling developed by British mathematician Roger Penrose in the 1970s. It uses two different tile shapes (such as "kites" and "darts") to completely cover a plane without creating a repeating pattern.</p>
+            <p class="body-font">中文：这种镶嵌方式具有五重旋转对称性，打破了传统周期性镶嵌的限制，在晶体学、建筑设计和艺术领域都有重要应用。</p>
+            <p class="body-font">English: This tiling method has five-fold rotational symmetry, breaking the limitations of traditional periodic tiling, and has important applications in crystallography, architectural design, and art.</p>
+        </div>
+        <div class="image-content">
+            <img
+                    src="https://pic4.zhimg.com/50/v2-ff7bdc23dd9744312defb789b33cba41_hd.jpg?source=1940ef5c"
+                    alt="彭罗斯镶嵌示例"
+                    crossorigin="anonymous"
+            onerror="this.src='https://picsum.photos/id/1041/800/600'; this.alt='彭罗斯镶嵌备用图'"
+            >
+        </div>
+    </div>
+</div>
+
+<div id="introPage2" class="page intro-page even-page">
+    <div class="nav-btn prev-btn" id="prevBtn2"></div>
+    <div class="nav-btn next-btn" id="nextBtn2"></div>
+    <div class="intro-content">
+        <div class="text-content">
+            <h2 class="title-font">正多边形镶嵌 (Regular Tiling)</h2>
+            <p class="body-font">中文：正多边形镶嵌是指用相同的正多边形完全覆盖平面，且在每个顶点处的角度之和恰好为360度。数学上仅存在3种正多边形能实现完美镶嵌：正三角形、正方形和正六边形。</p>
+            <p class="body-font">English: Regular tiling refers to covering a plane completely with identical regular polygons, where the sum of angles at each vertex is exactly 360 degrees. Mathematically, only 3 types of regular polygons can achieve perfect tiling: equilateral triangles, squares, and regular hexagons.</p>
+            <p class="body-font">中文：正六边形镶嵌因“最省材料且覆盖效率最高”的特性，被广泛应用于蜂巢结构、足球表面和建筑幕墙设计中。</p>
+            <p class="body-font">English: Regular hexagon tiling is widely used in honeycomb structures, football surfaces, and building curtain wall designs due to its characteristics of "saving materials and having the highest coverage efficiency".</p>
+        </div>
+        <div class="image-content">
+            <img
+                    src="https://ts3.tc.mm.bing.net/th/id/OIP-C.H8zydiltQHJ8jJo8uNIZygHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+                    alt="正多边形镶嵌示例"
+                    crossorigin="anonymous"
+                    onerror="this.src='https://picsum.photos/id/1050/800/600'; this.alt='正多边形镶嵌备用图'"
+            >
+        </div>
+    </div>
+</div>
+
+<div id="introPage3" class="page intro-page odd-page">
+    <div class="nav-btn prev-btn" id="prevBtn3"></div>
+    <div class="nav-btn next-btn" id="nextBtn3"></div>
+    <div class="intro-content">
+        <div class="text-content">
+            <h2 class="title-font">埃舍尔镶嵌 (Escher Tiling)</h2>
+            <p class="body-font">中文：荷兰艺术家M.C.埃舍尔将数学严谨性与艺术想象力结合，创造出独特的“具象镶嵌”。他的作品以动物、人物或日常物品为原型，通过变形、对称设计实现无缝拼接，如《昼与夜》《变形》等经典作品。</p>
+            <p class="body-font">English: Dutch artist M.C. Escher combined mathematical rigor with artistic imagination to create unique "representational tiling". His works use animals, figures, or daily objects as prototypes, achieving seamless splicing through deformation and symmetrical design, such as classic works like "Day and Night" and "Metamorphosis".</p>
+            <p class="body-font">中文：埃舍尔的镶嵌不仅是视觉艺术，更深刻探索了“有限与无限”“现实与错觉”的哲学命题，影响了现代平面设计与数字艺术。</p>
+            <p class="body-font">English: Escher's tiling is not only visual art but also profoundly explores philosophical propositions of "finite and infinite" and "reality and illusion", influencing modern graphic design and digital art.</p>
+        </div>
+        <div class="image-content">
+            <img
+                    src="https://ts1.tc.mm.bing.net/th/id/R-C.6acfc7ce57ac3af61a4ac0670af01db7?rik=ZJZNJwo3HOrG1Q&riu=http%3a%2f%2fwww.people.com.cn%2fmediafile%2fpic%2f20160530%2f17%2f6302341824247109505.jpg&ehk=TB%2bEbsrQZVvAjqleUlMP7KsYV2xM5VOuMXGuLRCm%2bZ4%3d&risl=&pid=ImgRaw&r=0"
+                    alt="埃舍尔镶嵌示例"
+                    crossorigin="anonymous"
+                    onerror="this.src='https://picsum.photos/id/1035/800/600'; this.alt='埃舍尔镶嵌备用图'"
+            >
+        </div>
+    </div>
+</div>
+
+<div id="designPage" class="page">
+    <div class="nav-btn back-to-main" id="backToMain"></div>
+    <h1 class="design-title title-font">选择镶嵌类型进行设计</h1>
+    <div class="design-container">
+        <div class="design-card" data-url="https://aatishb.com/patterncollider/">
+            <img src="https://pic.pngsucai.com/00/16/55/41ae020c89bb2cf0.webp" alt="彭罗斯镶嵌">
+            <p class="btn-font">彭罗斯镶嵌设计</p>
+        </div>
+        <div class="design-card" data-url="https://more.graphics">
+            <img src="https://ts2.tc.mm.bing.net/th/id/OIP-C.o9IDDo6Lib9s81E8C5tiyQHaEW?rs=1&pid=ImgDetMain&o=7&rm=3" alt="正多边形镶嵌">
+            <p class="btn-font">正多边形镶嵌设计</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    const introPages = [
+        document.getElementById('introPage1'),
+        document.getElementById('introPage2'),
+        document.getElementById('introPage3')
+    ];
+    const designPage = document.getElementById('designPage');
+    const usernameInput = document.getElementById('username');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const introBtn = document.getElementById('introBtn');
+    const designBtn = document.getElementById('designBtn');
+    const backToMainBtn = document.getElementById('backToMain');
+    const designCards = document.querySelectorAll('.design-card');
+    const prevBtns = [
+        document.getElementById('prevBtn1'),
+        document.getElementById('prevBtn2'),
+        document.getElementById('prevBtn3')
+    ];
+    const nextBtns = [
+        document.getElementById('nextBtn1'),
+        document.getElementById('nextBtn2'),
+        document.getElementById('nextBtn3')
+    ];
+
+    let currentIntroPage = 0;
+
+    function showPage(targetPage) {
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+        targetPage.classList.add('active');
+    }
+
+    confirmBtn.addEventListener('click', () => {
+        if (usernameInput.value.trim()) {
+            showPage(page2);
+        } else {
+            alert('请输入用户名');
+        }
+    });
+
+    // 用户名回车提交
+    usernameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') confirmBtn.click();
+    });
+
+    introBtn.addEventListener('click', () => {
+        currentIntroPage = 0;
+        showPage(introPages[0]);
+    });
+
+    designBtn.addEventListener('click', () => {
+        showPage(designPage);
+    });
+
+    prevBtns.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            if (currentIntroPage > 0) {
+                currentIntroPage--;
+                showPage(introPages[currentIntroPage]);
+            } else {
+                showPage(page2);
+            }
+        });
+    });
+
+    nextBtns.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            if (currentIntroPage < introPages.length - 1) {
+                currentIntroPage++;
+                showPage(introPages[currentIntroPage]);
+            } else {
+                showPage(page2);
+            }
+        });
+    });
+
+    backToMainBtn.addEventListener('click', () => {
+        showPage(page2);
+    });
+
+    designCards.forEach(card => {
+        card.addEventListener('click', () => {
+            window.open(card.getAttribute('data-url'), '_blank');
+        });
+    });
+</script>
+</body>
+</html>
